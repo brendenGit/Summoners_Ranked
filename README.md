@@ -27,7 +27,7 @@ We use the endpoint:
 
 The endpoint returns a list of match IDs which we will perform further action on.
 
-#### Example:
+### Example:
 
 `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/yu6FoYvV64VOPORPBF93HhaksnHMuYsfbGuqTe55DF2zK1C33KmCfDAraB5UzEbUgeWrYpFS-RBeOQ/ids`
 
@@ -38,6 +38,6 @@ We use the endpoint:
 
 We are then returned an object of match data which we will manipulate based on user input.
 
-#### Example:
+### Example:
 
 `https://americas.api.riotgames.com/lol/match/v5/matches/NA1_4810500600`
