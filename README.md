@@ -15,11 +15,11 @@ The endpoint returns information about the summoner's account. We will want to r
 - Summoner Name
 - ProfileIconId
 
-####Example:
+#### Example:
 
 `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Brendinoo`
 
-###Obtaining Match Data
+### Obtaining Match Data
 We use the following endpoints to search for match information. We first need to find match IDs. We must include our API key in the header parameters.
 We use the endpoint: 
 
@@ -27,7 +27,7 @@ We use the endpoint:
 
 The endpoint returns a list of match IDs which we will perform further action on.
 
-####Example:
+#### Example:
 
 `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/yu6FoYvV64VOPORPBF93HhaksnHMuYsfbGuqTe55DF2zK1C33KmCfDAraB5UzEbUgeWrYpFS-RBeOQ/ids`
 
@@ -38,6 +38,6 @@ We use the endpoint:
 
 We are then returned an object of match data which we will manipulate based on user input.
 
-####Example:
+#### Example:
 
 `https://americas.api.riotgames.com/lol/match/v5/matches/NA1_4810500600`
