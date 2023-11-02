@@ -63,12 +63,41 @@ class User(db.Model):
         nullable=False
     )
 
+    summoner_name = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    profile_icon_id =db.Column(
+        db.Integer
+    )
+
     friends = db.relationship(
         "Friends",
-        primaryjoin=(Friends.friended_by_puuid == id),
+        primaryjoin=(Friends.friended_by_puuid == puuid),
     )
 
     #need to add methods and class methods
+    @classmethod
+    def create_account(cls, puuid, email, password, region, summoner_name, profile_icon_id):
+        """Create a new user account.
+
+        Hashes password and adds user to system.
+        """
+
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(
+            puuid=puuid,
+            email=email,
+            password=hashed_pwd,
+            region=region,
+            summoner_name=summoner_name,
+            profile_icon_id=profile_icon_id
+        )
+
+        db.session.add(user)
+        return user
 
 
 
