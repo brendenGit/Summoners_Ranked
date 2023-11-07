@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add Friend</h1>
+<div>
+    <form id="addFriendForm" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form
+            if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <button type="submit">Add Friend</button>
+    </form>
+</div>
+<script src="/static/sign_up.js"></script>
+{% endblock %}

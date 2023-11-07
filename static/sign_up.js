@@ -1,4 +1,11 @@
 const signUpForm = document.getElementById("signUpForm")
+const numberOfGamesValue = document.getElementById("number-of-games-value")
+const number_of_games = document.getElementById("number_of_games")
+
+
+number_of_games.addEventListener('input', function () {
+    numberOfGamesValue.textContent = this.value;
+});
 
 // async function findPUUID(username) {
 //     try {

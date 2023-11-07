@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Sign Up</h2>
+<div>
+    <form id="signUpForm" method="POST" action="/sign_up">
+        {{ sign_up_form.hidden_tag() }}
+        {% for field in sign_up_form if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+
+            {% for error in field.errors %}
+            {{ error }}
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <button type="submit">Create Account</button>
+    </form>
+</div>
+
+<h2>Login</h2>
+<div>
+    <form id="signUpForm" method="POST">
+        {{ login_form.hidden_tag() }}
+        {% for field in login_form
+        if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+
+            {% for error in field.errors %}
+            {{ error }}
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+{% endblock %}

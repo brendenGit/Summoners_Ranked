@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add Friend</h2>
+<div>
+    <form id="addFriendForm" method="POST">
+        {{ add_friend_form.hidden_tag() }}
+        {% for field in add_friend_form
+            if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <button type="submit">Add Friend</button>
+    </form>
+</div>
+
+<h2>Create a New Leaderboard</h2>
+<div>
+    <form id="createLeaderboardForm" method="POST">
+        {{ create_leaderboard_form.hidden_tag() }}
+        {% for field in create_leaderboard_form if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+
+            {% if field.id == 'number_of_games' %}
+            <span id="number-of-games-value">{{ field.data }}</span>
+            {% endif %}
+            {% for error in field.errors %}
+            {{ error }}
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <fieldset>
+            <legend>Select Friends to Include</legend>
+            {% for friend in choices %}
+            <input type="checkbox" name="selected_friends" id="{{ friend.friend_puuid }}"
+                value="{{ friend.friend_puuid }}">
+            <label for="{{ friend.friend_puuid }}">{{ friend.friend_summoner_name }}</label>
+            {% endfor %}
+        </fieldset>
+        <button type="submit">Create Leaderboard</button>
+    </form>
+</div>
+
+<script src="/static/sign_up.js"></script>
+{% endblock %}

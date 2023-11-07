@@ -10,6 +10,65 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 
+class Performance(db.Model):
+    """
+    Model for performances
+
+    This model holds data about an individual player's performance across a 
+    set of games. This data is linked to a single leaderboard
+    """
+
+    __tablename__ = 'performances'
+
+    id = db.Column(
+        db.Integer, 
+        primary_key=True, 
+        autoincrement=True
+    )
+
+    puuid = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    summoner_name = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    perf_metric = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    leaderboard_id = db.Column(
+        db.Integer,
+        db.ForeignKey('leaderboards.id', ondelete="cascade"),
+        nullable=False
+    )
+
+    score = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    #need to add methods and class methods
+    @classmethod
+    def create_performance(cls, puuid, summoner_name, perf_metric, leaderboard_id, score):
+        """Create a new performance."""
+
+        performance = Performance(
+            puuid=puuid,
+            summoner_name=summoner_name,
+            perf_metric=perf_metric,
+            leaderboard_id=leaderboard_id,
+            score=score
+        )
+
+        db.session.add(performance)
+        return performance
+
+
 class Friends(db.Model):
     """Friends model"""
 
@@ -32,7 +91,99 @@ class Friends(db.Model):
         nullable=False
     )
 
+    friend_profile_icon = db.Column(
+        db.String,
+        nullable=True,
+        #need to set default value later
+    )
+
+    friend_summoner_name = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    friend_region = db.Column(
+        db.String,
+        nullable=False
+    )
+
     #need to add methods and class methods
+    @classmethod
+    def add_friend(cls, friend_puuid, friended_by_puuid, friend_profile_icon, friend_summoner_name, friend_region):
+        """Add a new friend.
+
+        Adds a friend db entry done by the user.
+        """
+
+        friend = Friends(
+            friend_puuid=friend_puuid,
+            friended_by_puuid=friended_by_puuid,
+            friend_profile_icon=friend_profile_icon,
+            friend_summoner_name=friend_summoner_name,
+            friend_region = friend_region
+        )
+
+        db.session.add(friend)
+        return friend
+
+
+class Leaderboard(db.Model):
+    """Leaderboard model"""
+
+    __tablename__ = 'leaderboards'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.utcnow(),
+    )
+
+    created_by = db.Column(
+        db.String,
+        db.ForeignKey('users.puuid', ondelete="cascade"),
+    )
+
+    game_type = db.Column(
+        db.String
+    )
+
+    ranked_by = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    number_of_games = db.Column(
+        db.Integer,
+        nullable=False,
+        default=20
+    )
+
+    performances = db.relationship(
+        "Performance",
+        primaryjoin=(Performance.leaderboard_id == id),
+    )
+
+    #need to add methods and class methods
+    @classmethod
+    def create_leaderboard(cls, created_by, game_type, ranked_by, number_of_games):
+        """Create a new leaderboard."""
+
+        leaderboard = Leaderboard(
+            created_by=created_by,
+            game_type=game_type,
+            ranked_by=ranked_by,
+            number_of_games=number_of_games
+        )
+
+        db.session.add(leaderboard)
+        return leaderboard
+
 
 
 class User(db.Model):
@@ -77,6 +228,11 @@ class User(db.Model):
         primaryjoin=(Friends.friended_by_puuid == puuid),
     )
 
+    leaderboards = db.relationship(
+        "Leaderboard",
+        primaryjoin=(Leaderboard.created_by == puuid),
+    )
+
     #need to add methods and class methods
     @classmethod
     def create_account(cls, puuid, email, password, region, summoner_name, profile_icon_id):
@@ -98,77 +254,19 @@ class User(db.Model):
 
         db.session.add(user)
         return user
+    
+    @classmethod
+    def authenticate(cls, email, password):
+        """Find user with `email` and `password`.
 
+        If can't find matching user (or if password is wrong), returns False.
+        """
 
+        user = cls.query.filter_by(email=email).first()
 
-class Leaderboard(db.Model):
-    """Leaderboard model"""
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
 
-    __tablename__ = 'leaderboards'
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-
-    created_by = db.Column(
-        db.String,
-        db.ForeignKey('users.puuid', ondelete="cascade"),
-    )
-
-    created_at = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.utcnow(),
-    )
-
-    ranked_by = db.Column(
-        db.String,
-        nullable=False
-    )
-
-    number_of_games = db.Column(
-        db.Integer,
-        nullable=False,
-        default=20
-    )
-
-    #need to add methods and class methods
-
-class Performance(db.Model):
-    """
-    Model for performances
-
-    This model holds data about an individual player's performance across a 
-    set of games. This data is linked to a single leaderboard
-    """
-
-    id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        autoincrement=True
-    )
-
-    puuid = db.Column(
-        db.String,
-        nullable=False
-    )
-
-    perf_metric = db.Column(
-        db.String,
-        nullable=False
-    )
-
-    leaderboard_id = db.Column(
-        db.Integer,
-        db.ForeignKey('leaderboards.id', ondelete="cascade"),
-        nullable=False
-    )
-
-    score = db.Column(
-        db.Integer,
-        nullable=False
-    )
-
-    #need to add methods and class methods
+        return False
