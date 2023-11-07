@@ -4,11 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@blaze/css@x.x.x/dist/blaze/blaze.css">
+    <link rel="stylesheet" href="/static/app.css">
+    <script type="module" src="https://unpkg.com/@blaze/atoms@x.x.x/dist/blaze-atoms/blaze-atoms.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@blaze/atoms@x.x.x/dist/blaze-atoms/blaze-atoms.js"></script>
+
     {% block title %} <title>League of Companions</title> {% endblock %}
 </head>
 
 <body>
     {% block content %} {% endblock %}
+    <script src="/static/app.js"></script>
 </body>
 
 </html>

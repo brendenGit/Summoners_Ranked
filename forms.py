@@ -5,9 +5,9 @@ from wtforms.validators import InputRequired, AnyOf, NumberRange, URL
 class SignUpForm(FlaskForm):
     """Form for creating an account (signing up to LoC)."""
     
-    email = StringField("Email", validators=[InputRequired()])
-    password = PasswordField("Password", validators=[InputRequired()])
-    region = SelectField('', choices=[('NA1', 'North America'), 
+    sign_up_email = StringField("Email", validators=[InputRequired()])
+    sign_up_password = PasswordField("Password", validators=[InputRequired()])
+    region = SelectField('Region', choices=[('NA1', 'North America'), 
                                       ('EUW1', 'Europe West'), 
                                       ('EUN1', 'Europe Nordic & East'),
                                       ('BR1', 'Brazil'),

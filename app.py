@@ -10,6 +10,8 @@ from sqlalchemy.exc import IntegrityError
 import os
 
 
+
+
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
@@ -21,6 +23,9 @@ app.config['SECRET_KEY'] = 'sage123'
 
 db.init_app(app)
 migrate = Migrate(app, db)
+
+##############################################################################
+# Main routes for user sign in/sign up and the main page
 
 @app.route("/")
 def start():
@@ -37,8 +42,8 @@ def start():
 def show_home():
 
     if not g.user:
-        response = {"error": "Please login!"}
-        return jsonify(response), 401
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
     
     add_friend_form = AddFriendForm()
     create_leaderboard_form = CreateLeaderboardForm()
@@ -99,13 +104,16 @@ def login():
         response = {"error": "Invalid username or password!"}
         return jsonify(response), 401
 
-    return redirect('/home')
+    return redirect('/')
 
 
 @app.route('/logout')
 def logout():
     """Handle logout of user."""
-
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
     do_logout()
     response = {"success": "Successfully logged out"}
     return jsonify(response), 200
@@ -122,7 +130,10 @@ def sign_up_form():
     If the there already is a user with that username: flash message
     and re-present form.
     """
-
+    if g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/home")
+    
     form = SignUpForm()
 
     if form.validate_on_submit():
@@ -145,14 +156,15 @@ def sign_up_form():
                 db.session.commit()
                 do_login(user)
 
-                flash(f"Welcome {user.summoner_name}", "success")
+                flash(f"{user.summoner_name}! Thanks for creating an account","success")
                 return redirect("/home")
             
             except IntegrityError:
                 response = {"error": "Account with that email or summoner name is already taken"}
                 return jsonify(response), 400
         else:
-            return "Error: Failed to retrieve summoner data"
+            response = {"error": "Failed to retrieve summoner data"}
+            return jsonify(response), 500
 
     else:
         # If form validation fails, return an error response with the form errors
@@ -166,6 +178,10 @@ def sign_up_form():
 
 @app.route("/add_friend", methods=['GET','POST'])
 def add_friend_form():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
     form = AddFriendForm()
 
     if form.validate_on_submit():
@@ -174,8 +190,6 @@ def add_friend_form():
         friend_summoner_data = get_summoner_friend_data(RIOT_API_KEY,
                                                         friend_summoner_name,
                                                         friend_region)
-
-        print(friend_summoner_data)
 
         if friend_summoner_data:
             friend_puuid = friend_summoner_data['puuid']
@@ -192,16 +206,28 @@ def add_friend_form():
                             )
             db.session.commit()
 
-            return friend_summoner_data
+            response = {"friend_puuid":friend_puuid, "friend_summoner_name":friend_summoner_name}
+            return jsonify(response), 200
         else:
-            return "Error: Failed to retrieve summoner data"
+            response = {"error": "Failed to retrieve summoner data"}
+            return jsonify(response), 500
     
     else:
-        return render_template("add_friend.html", form=form)
+        # If form validation fails, return an error response with the form errors
+        errors = form.errors
+        response = {"error": "Form validation failed", "form_errors": errors}
+        return jsonify(response), 400
     
+
+##############################################################################
+# Routes for creating leaderboards and performances
 
 @app.route("/create_leaderboard", methods=['GET','POST'])
 def create_leaderboard():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
     form = CreateLeaderboardForm()
 
     if form.validate_on_submit():
@@ -252,16 +278,7 @@ def create_leaderboard():
         return jsonify(perf_data)
     
     else:
-        return redirect('/')
-
-
-
-
-
-
-
-
-# @app.route("/check_friends", methods=['GET'])
-# def return_friends():
-#     friend_region = 
-#     return friend_region
+        # If form validation fails, return an error response with the form errors
+        errors = form.errors
+        response = {"error": "Form validation failed", "form_errors": errors}
+        return jsonify(response), 400
