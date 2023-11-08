@@ -48,13 +48,11 @@ def show_home():
     add_friend_form = AddFriendForm()
     create_leaderboard_form = CreateLeaderboardForm()
 
-    choices = g.user.friends
-
     return render_template(
         "home.html", 
         add_friend_form=add_friend_form,
         create_leaderboard_form=create_leaderboard_form,
-        choices=choices
+        user=g.user
         )
 
 
@@ -147,8 +145,8 @@ def sign_up_form():
             try:
                 user = User.create_account(
                     puuid=summoner_data['puuid'],
-                    email = form.email.data,
-                    password=form.password.data,
+                    email = form.sign_up_email.data,
+                    password=form.sign_up_password.data,
                     region = form.region.data,
                     summoner_name=summoner_data['name'],
                     profile_icon_id=summoner_data['profileIconId']

@@ -1,3 +1,21 @@
 .noDisplay {
     display: none;
 }
+
+.left-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #333;
+    padding: 0px;
+    width: 100%;
+}
+
+.label-container {
+    display: flex;
+    align-items: center;
+}
+.c-label {
+    margin-right: 10px; /* Add some spacing between label and value */
+}

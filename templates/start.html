@@ -6,117 +6,73 @@
         <div class="o-grid-text"></div>
     </div>
     <div class="o-grid__cell o-grid__cell--width-60">
-        <div id="loginFormDiv">
-            <form id="signUpForm" method="POST" action="/sign_up" class="o-container o-container--small c-card u-high">
-                <header class="c-card__header">
-                    <h2 class="c-heading">
-                        Login
-                    </h2>
-                    <p id="createAccountLink">Don't have an account yet? Click here to sign up!</p>
-                </header>
-                <div class="c-card__body">
-                    {{ login_form.hidden_tag() }}
-                    {% for field in login_form if field.widget.input_type != 'hidden' %}
-                    <div class="o-form-element">
-                        <label class="c-label">
-                            {{ field.label }}:
-                            {% if field.label == "Email"%}
-                            {{ field(placeholder="your@email.com", class="c-field c-field--label", type="email") }}
-                            {% else %}
-                            {{ field(class="c-field c-field--label") }}
-                            {% endif %}
-                        </label>
-                        {% for error in field.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </div>
+        <form id="loginForm" method="POST" action="/login" class="o-container o-container--small c-card u-high">
+            <header class="c-card__header">
+                <h2 class="c-heading">
+                    Login
+                </h2>
+                <p id="createAccountLink">Don't have an account yet? Click here to sign up!</p>
+            </header>
+            <div class="c-card__body">
+                {{ login_form.hidden_tag() }}
+                {% for field in login_form if field.widget.input_type != 'hidden' %}
+                <div class="o-form-element">
+                    <label class="c-label">
+                        {{ field.label }}:
+                        {% if field.label == "Email"%}
+                        {{ field(placeholder="your@email.com", class="c-field c-field--label", type="email") }}
+                        {% else %}
+                        {{ field(class="c-field c-field--label") }}
+                        {% endif %}
+                    </label>
+                    {% for error in field.errors %}
+                    {{ error }}
                     {% endfor %}
                 </div>
-                <footer class="c-card__footer">
-                    <button type="submit" class="c-button c-button--brand c-button--block">
-                        Login
-                    </button>
-                </footer>
-            </form>
-        </div>
-        <div id="signUpFormDiv" class="noDisplay">
-            <form id="signUpForm" method="POST" action="/sign_up" class="o-container o-container--small c-card u-high">
-                <header class="c-card__header">
-                    <h2 class="c-heading">
-                        Sign Up
-                    </h2>
-                    <p id="loginLink" class="noDisplay">Back to Login</p>
-                </header>
-                <div class="c-card__body">
-                    {{ sign_up_form.hidden_tag() }}
-                    {% for field in sign_up_form if field.widget.input_type != 'hidden' %}
-                    <div class="o-form-element">
-                        <label class="c-label">
-                            {{ field.label }}:
-                            {% if field.label == "Email"%}
-                            {{ field(placeholder="your@email.com", class="c-field c-field--label", type="email") }}
-                            {% else %}
-                            {{ field(class="c-field c-field--label") }}
-                            {% endif %}
-                        </label>
-                        {% for error in field.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </div>
+                {% endfor %}
+            </div>
+            <footer class="c-card__footer">
+                <button type="submit" class="c-button c-button--brand c-button--block">
+                    Login
+                </button>
+            </footer>
+        </form>
+        <form id="signUpForm" class="noDisplay o-container o-container--small c-card u-high" method="POST"
+            action="/sign_up" class="o-container o-container--small c-card u-high">
+            <header class="c-card__header">
+                <h2 class="c-heading">
+                    Sign Up
+                </h2>
+                <p id="loginLink" class="noDisplay">Back to Login</p>
+            </header>
+            <div class="c-card__body">
+                {{ sign_up_form.hidden_tag() }}
+                {% for field in sign_up_form if field.widget.input_type != 'hidden' %}
+                <div class="o-form-element">
+                    <label class="c-label">
+                        {{ field.label }}:
+                        {% if field.label == "Email"%}
+                        {{ field(placeholder="your@email.com", class="c-field c-field--label", type="email") }}
+                        {% else %}
+                        {{ field(class="c-field c-field--label") }}
+                        {% endif %}
+                    </label>
+                    {% for error in field.errors %}
+                    {{ error }}
                     {% endfor %}
                 </div>
-                <footer class="c-card__footer">
-                    <button type="submit" class="c-button c-button--brand c-button--block">
-                        Sign Up
-                    </button>
-                </footer>
-            </form>
-        </div>
-
+                {% endfor %}
+            </div>
+            <footer class="c-card__footer">
+                <button type="submit" class="c-button c-button--brand c-button--block">
+                    Sign Up
+                </button>
+            </footer>
+        </form>
     </div>
     <div class="o-grid__cell o-grid__cell--width-20">
         <div class="o-grid-text"></div>
     </div>
 </div>
+<script src="/static/start.js"></script>
 {% endblock %}
-
-
-
-
-
-<!-- <h2>Sign Up</h2> -->
-<!-- <div>
-    <form id="signUpForm" method="POST" action="/sign_up">
-        {{ sign_up_form.hidden_tag() }}
-        {% for field in sign_up_form if field.widget.input_type != 'hidden' %}
-        <p>
-            {{ field.label }}
-            {{ field }}
-
-            {% for error in field.errors %}
-            {{ error }}
-            {% endfor %}
-        </p>
-        {% endfor %}
-        <button type="submit">Create Account</button>
-    </form>
-</div> -->
-
-<!-- <h2>Login</h2>
-<div>
-    <form id="loginForm" method="POST">
-        {{ login_form.hidden_tag() }}
-        {% for field in login_form
-        if field.widget.input_type != 'hidden' %}
-        <p>
-            {{ field.label }}
-            {{ field }}
-
-            {% for error in field.errors %}
-            {{ error }}
-            {% endfor %}
-        </p>
-        {% endfor %}
-        <button type="submit">Login</button>
-    </form>
-</div>

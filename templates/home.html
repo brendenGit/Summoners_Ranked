@@ -1,54 +1,92 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="o-grid__cell o-grid__cell--width-15 left-nav">
+    <blaze-accordion>
+        <blaze-accordion-pane open header="Add Friend">
+            <form id="addFriendForm" method="POST" action="/add_friend"
+                class="o-container o-container--xsmall c-card u-high">
+                <div class="c-card__body">
+                    {{ add_friend_form.hidden_tag() }}
+                    {% for field in add_friend_form if field.widget.input_type != 'hidden' %}
+                    <div class="o-form-element">
+                        {{ field.label(class="c-label") }}
+                        {{ field(class="c-field c-field--label") }}
 
-<h2>Add Friend</h2>
-<div>
-    <form id="addFriendForm" method="POST">
-        {{ add_friend_form.hidden_tag() }}
-        {% for field in add_friend_form
-            if field.widget.input_type != 'hidden' %}
-        <p>
-            {{ field.label }}
-            {{ field }}
+                        {% for error in field.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <footer class="c-card__footer">
+                    <button type="submit" class="c-button c-button--brand c-button--block">
+                        Add Friend
+                    </button>
+                </footer>
+            </form>
+        </blaze-accordion-pane>
+        <blaze-accordion-pane header="Create New Leaderboard">
+            <form id="create_leaderboard_form" method="POST" action=""
+                class="o-container o-container--xsmall c-card u-high">
+                <div class="c-card__body">
+                    {{ create_leaderboard_form.hidden_tag() }}
+                    {% for field in create_leaderboard_form if field.widget.input_type != 'hidden' %}
+                    <div class="o-form-element">
+                        {% if field.id == 'number_of_games' %}
+                        <div class="label-container">
+                            {{ field.label(class="c-label") }}
+                            <span id="number-of-games-value">{{ field.data }}</span>
+                        </div>
+                        {{ field(class="c-field c-field--label") }}
+                        {% else %}
+                        {{ field.label(class="c-label") }}
+                        {{ field(class="c-field c-field--label") }}
 
-            {% for error in field.errors %}
-                {{ error }}
-            {% endfor %}
-        </p>
-        {% endfor %}
-        <button type="submit">Add Friend</button>
-    </form>
+                        {% for error in field.errors %}
+                        {{ error }}
+                        {% endfor %}
+
+                        {% endif %}
+                        {% for error in field.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <footer class="c-card__footer">
+                    <button type="submit" class="c-button c-button--brand c-button--block">
+                        Create Leaderboard
+                    </button>
+                </footer>
+            </form>
+        </blaze-accordion-pane>
+        <blaze-accordion-pane header="View Friends">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Summoner Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for friend in g.user.friends %}
+                    <tr>
+                        <td>{{ friend.friend_summoner_name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </blaze-accordion-pane>
+        <blaze-accordion-pane header="View Previous Leaderboards">
+            To toggle other panes
+        </blaze-accordion-pane>
+    </blaze-accordion>
 </div>
+<div class="o-grid__cell o-grid__cell--width-70">
 
-<h2>Create a New Leaderboard</h2>
-<div>
-    <form id="createLeaderboardForm" method="POST">
-        {{ create_leaderboard_form.hidden_tag() }}
-        {% for field in create_leaderboard_form if field.widget.input_type != 'hidden' %}
-        <p>
-            {{ field.label }}
-            {{ field }}
-
-            {% if field.id == 'number_of_games' %}
-            <span id="number-of-games-value">{{ field.data }}</span>
-            {% endif %}
-            {% for error in field.errors %}
-            {{ error }}
-            {% endfor %}
-        </p>
-        {% endfor %}
-        <fieldset>
-            <legend>Select Friends to Include</legend>
-            {% for friend in choices %}
-            <input type="checkbox" name="selected_friends" id="{{ friend.friend_puuid }}"
-                value="{{ friend.friend_puuid }}">
-            <label for="{{ friend.friend_puuid }}">{{ friend.friend_summoner_name }}</label>
-            {% endfor %}
-        </fieldset>
-        <button type="submit">Create Leaderboard</button>
-    </form>
 </div>
+<div class="o-grid__cell o-grid__cell--width-15">
 
-<script src="/static/sign_up.js"></script>
+</div>
+<script src="/static/home.js"></script>
 {% endblock %}

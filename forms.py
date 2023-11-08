@@ -27,7 +27,7 @@ class AddFriendForm(FlaskForm):
     """Form for adding a friend to a users friends list"""
     
     friend_summoner_name = StringField("Summoner Name", validators=[InputRequired()])
-    friend_region = SelectField('', choices=[('NA1', 'North America'), 
+    friend_region = SelectField('Region', choices=[('NA1', 'North America'), 
                                       ('EUW1', 'Europe West'), 
                                       ('EUN1', 'Europe Nordic & East'),
                                       ('BR1', 'Brazil'),
