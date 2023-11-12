@@ -29,7 +29,7 @@ def get_summoner_friend_data(api_key, friend_summoner_name, friend_region):
         return None
     
 
-def friends_performance(api_key, puuid, queue, num_games, ranked_by):
+def friends_performance(api_key, puuid, queue, num_games):
     friend = Friends.query.filter_by(friend_puuid=puuid).first()
 
     friend_region = 'americas' if friend.friend_region == 'NA1' else 'error'
@@ -44,7 +44,9 @@ def friends_performance(api_key, puuid, queue, num_games, ranked_by):
         match_ids = response.json()
     except requests.exceptions.RequestException as error:
         return None
-    score = 0
+    
+    kills, deaths, wins, losses, totalDamageDealt, totalDamageTaken = 0, 0, 0, 0, 0, 0
+  
     for match_id in match_ids:
         api_url = f"https://{friend_region}.api.riotgames.com/lol/match/v5/matches/{match_id}"
         try:
@@ -56,21 +58,34 @@ def friends_performance(api_key, puuid, queue, num_games, ranked_by):
                     break
 
             if player_data is not None:
-                value = player_data[ranked_by]
-            else:
-                print("Participant with the given puuid not found.")
-            
-            if ranked_by != 'win':
-                score = score + value
-            elif value == True:
-                score += 1
+
+                if player_data['win'] == True:
+                    wins += 1
+                else:
+                    losses += 1
+
+                kills += player_data['kills']
+                deaths += player_data['deaths']
+                totalDamageDealt += player_data['totalDamageDealtToChampions']
+                totalDamageTaken += player_data['totalDamageTaken']
 
         except requests.exceptions.RequestException as error:
             return None
-    return score
+        
+    results = {
+        'Kills': kills,
+        'Deaths': deaths,
+        'Wins': wins,
+        'Losses': losses,
+        'Total Damage Dealt': totalDamageDealt,
+        'Total Damage Taken': totalDamageTaken,
+        'KDA': kills/deaths
+    }
+
+    return results
 
 
-def per_performance(api_key, puuid, queue, num_games, ranked_by):
+def per_performance(api_key, puuid, queue, num_games):
     user = User.query.filter_by(puuid=puuid).first()
 
     region = 'americas' if user.region == 'NA1' else 'error'
@@ -85,7 +100,9 @@ def per_performance(api_key, puuid, queue, num_games, ranked_by):
         match_ids = response.json()
     except requests.exceptions.RequestException as error:
         return None
-    score = 0
+    
+    kills, deaths, wins, losses, totalDamageDealt, totalDamageTaken = 0, 0, 0, 0, 0, 0
+
     for match_id in match_ids:
         api_url = f"https://{region}.api.riotgames.com/lol/match/v5/matches/{match_id}"
         try:
@@ -97,18 +114,33 @@ def per_performance(api_key, puuid, queue, num_games, ranked_by):
                     break
 
             if player_data is not None:
-                value = player_data[ranked_by]
-            else:
-                print("Participant with the given puuid not found.")
-            
-            if ranked_by != 'win':
-                score = score + value
-            elif value == True:
-                score += 1
+
+                if player_data['win'] == 'true':
+                    wins += 1
+                else:
+                    losses += 1
+
+                kills += player_data['kills']
+                deaths += player_data['deaths']
+                totalDamageDealt += player_data['totalDamageDealtToChampions']
+                totalDamageTaken += player_data['totalDamageTaken']
 
         except requests.exceptions.RequestException as error:
             return None
-    return score
+        
+    results = {
+        'Kills': kills,
+        'Deaths': deaths,
+        'Wins': wins,
+        'Losses': losses,
+        'Total Damage Dealt': totalDamageDealt,
+        'Total Damage Taken': totalDamageTaken,
+        'KDA': kills/deaths
+    }
+
+    return results
+
+
 
     
 

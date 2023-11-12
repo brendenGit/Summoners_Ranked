@@ -1,21 +1,217 @@
-.noDisplay {
-    display: none;
+/**********************************************************************/
+/* Font */
+@font-face {
+    font-family: 'LeagueFont';
+    src: url('/static/font/BeaufortforLOL-Bold.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-BoldItalic.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-Heavy.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-HeavyItalic.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-Italic.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-Italic\(1\).otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-Light.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-LightItalic.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-LightItalic\(1\).otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-Medium.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-MediumItalic.otf') format('opentype'),
+        url('/static/font/BeaufortforLOL-Regular.otf') format('opentype');
 }
 
-.left-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    background-color: #333;
-    padding: 0px;
+
+
+/**********************************************************************/
+/* Styles for document structure */
+body {
+    font-family: 'LeagueFont', sans-serif;
+}
+
+.main {
+    padding: 0;
     width: 100%;
 }
 
+.main-grid {
+    background-color: #10171d;
+}
+
+
+/**********************************************************************/
+/* Small styles for number of games labeling */
 .label-container {
     display: flex;
     align-items: center;
 }
+
 .c-label {
-    margin-right: 10px; /* Add some spacing between label and value */
+    margin-right: 10px;
 }
+
+
+
+/**********************************************************************/
+/* Friends form styling */
+#friendsSelection label {
+    display: block;
+}
+
+#friendsSelection {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+
+
+/**********************************************************************/
+/* main content and leaderboard styles*/
+#leaderboardContainer {
+    width: 100%;
+    position: relative;
+    padding-left: 3%;
+    padding-right: 5%;
+}
+
+#leaderboardTable {
+    border-collapse: collapse;
+    color: rgb(224, 219, 219);
+    -webkit-box-shadow: 0px 5px 15px 8px #080823;
+    box-shadow: 0px 5px 15px 8px #080823;
+    margin-top: 5%;
+    margin-right: 2%;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.c-table__cell {
+    background-color: #1c2734 !important;
+}
+
+.c-table__head {
+    font-size: 1.2rem;
+}
+
+#head th {
+    height: 5rem;
+    font-size: 1.6rem;
+}
+
+td {
+    height: 4rem;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    position: relative;
+}
+
+
+/**********************************************************************/
+/* navbar styles*/
+#top-nav {
+    padding: 15px;
+    background-color: #10171d;
+    color: white;
+    text-align: right;
+}
+
+.brand {
+    font-size: 2.8rem;
+}
+
+#brandText {
+
+    @supports (background-clip: text) or (-webkit-background-clip: text) {
+        background-image:
+            url("/static/gold.jpg");
+        background-size: 110% auto;
+        background-position: center;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
+}
+
+
+#side-nav {
+    margin-left: 20px;
+    background-color: #10171d;
+    height: 100vh;
+    min-width: 275px;
+    max-width: 325px;
+    border-top: solid white 1px;
+}
+
+#side-nav button {
+    background-color: #1c2734 !important;
+}
+
+#selectionPane {
+    background-color: #10171d;
+    margin-top: 2%;
+}
+
+.c-card__item--divider {
+    margin-top: 5%;
+    background-color: transparent;
+    color: white;
+    font-size: 2rem;
+    padding-bottom: 0px;
+}
+
+.c-label {
+    font-size: 1.3rem;
+    padding: 0px !important;
+}
+
+
+
+/**********************************************************************/
+/* start page styles*/
+.startForm {
+    background-color: #1c2734 !important;
+    min-height: 300px;
+    min-width: 100%;
+    color: rgb(224, 219, 219);
+    -webkit-box-shadow: 0px 5px 15px 8px #080823;
+    box-shadow: 0px 5px 15px 8px #080823;
+}
+
+.startForm button {
+    background-color: #46576c !important;
+}
+
+.noDisplay {
+    display: none;
+    opacity: 0;
+}
+
+.showForm {
+    display: block;
+    opacity: 1;
+}
+
+#startNav {
+    text-align: center;
+    margin-bottom: 5%;
+    padding-top: 4%;
+}
+
+body {
+    background-color: #10171d;
+    width: 100%;
+    height: 100vh;
+}
+
+/* @media (max-width: 740px) {
+    * {
+        font-size: 70%;
+    }
+}
+
+@media (max-width: 500px) {
+    * {
+        font-size: 55%;
+    }
+}
+
+@media (max-width: 390px) {
+    * {
+        font-size: 45%;
+    }
+} */

@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="o-grid o-grid--demo">
-    <div class="o-grid__cell o-grid__cell--width-20">
-        <div class="o-grid-text"></div>
+<div id="startNav" class="o-grid o-grid--full">
+    <div class="o-grid__cell brand">
+        <div class="o-grid-text"><span id="brandText">SUMMONER'S RANKED</span></div>
     </div>
-    <div class="o-grid__cell o-grid__cell--width-60">
-        <form id="loginForm" method="POST" action="/login" class="o-container o-container--small c-card u-high">
+</div>
+<div class="o-grid start-grid">
+    <div class="o-grid__cell o-grid__cell--width-33">
+    </div>
+    <div class="o-grid__cell o-grid__cell--width-33">
+        <form id="loginForm" method="POST" action="/login"
+            class="o-container o-container--small c-card u-high startForm">
             <header class="c-card__header">
                 <h2 class="c-heading">
                     Login
@@ -37,8 +42,8 @@
                 </button>
             </footer>
         </form>
-        <form id="signUpForm" class="noDisplay o-container o-container--small c-card u-high" method="POST"
-            action="/sign_up" class="o-container o-container--small c-card u-high">
+        <form id="signUpForm" class="o-container o-container--small c-card u-high noDisplay startForm" method="POST"
+            action="/sign_up">
             <header class="c-card__header">
                 <h2 class="c-heading">
                     Sign Up
@@ -70,8 +75,7 @@
             </footer>
         </form>
     </div>
-    <div class="o-grid__cell o-grid__cell--width-20">
-        <div class="o-grid-text"></div>
+    <div class="o-grid__cell o-grid__cell--width-34">
     </div>
 </div>
 <script src="/static/start.js"></script>

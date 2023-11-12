@@ -1,92 +1,109 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="o-grid__cell o-grid__cell--width-15 left-nav">
-    <blaze-accordion>
-        <blaze-accordion-pane open header="Add Friend">
-            <form id="addFriendForm" method="POST" action="/add_friend"
-                class="o-container o-container--xsmall c-card u-high">
-                <div class="c-card__body">
-                    {{ add_friend_form.hidden_tag() }}
-                    {% for field in add_friend_form if field.widget.input_type != 'hidden' %}
-                    <div class="o-form-element">
-                        {{ field.label(class="c-label") }}
-                        {{ field(class="c-field c-field--label") }}
+<div class="o-grid">
+    <div class="o-grid__cell main">
+        <div class="o-grid" id="top-nav">
+            <div class="o-grid__cell o-grid__cell--width-70 brand">
+                <div class="o-grid-text"><span id="brandText">SUMMONER'S RANKED</span></div>
+            </div>
+            <div class="o-grid__cell o-grid__cell--width-30">
+                <a href="/logout"><button id="logoutLink" type="button"
+                        class="c-button c-button--ghost c-button--error">Log Out</button></a>
+            </div>
+        </div>
+        <div class="o-grid main-grid">
+            <div class="o-grid__cell o-grid__cell--width-15" id="side-nav">
+                <div class="c-card" id="selectionPane">
+                    <div role="separator" class="c-card__item c-card__item--divider">Add Friend</div>
+                    <div class="c-card__item  ">
+                        <form id="addFriendForm" class="o-container o-container--xsmall c-card u-high">
+                            <div class="c-card__body">
+                                {{ add_friend_form.hidden_tag() }}
+                                {% for field in add_friend_form if field.widget.input_type != 'hidden' %}
+                                <div class="o-form-element">
+                                    {{ field.label(class="c-label") }}
+                                    {{ field(class="c-field c-field--label") }}
 
-                        {% for error in field.errors %}
-                        {{ error }}
-                        {% endfor %}
+                                    {% for error in field.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <footer class="c-card__footer">
+                                <button type="submit" class="c-button c-button--brand c-button--block">
+                                    Add Friend
+                                </button>
+                            </footer>
+                        </form>
                     </div>
-                    {% endfor %}
-                </div>
-                <footer class="c-card__footer">
-                    <button type="submit" class="c-button c-button--brand c-button--block">
-                        Add Friend
-                    </button>
-                </footer>
-            </form>
-        </blaze-accordion-pane>
-        <blaze-accordion-pane header="Create New Leaderboard">
-            <form id="create_leaderboard_form" method="POST" action=""
-                class="o-container o-container--xsmall c-card u-high">
-                <div class="c-card__body">
-                    {{ create_leaderboard_form.hidden_tag() }}
-                    {% for field in create_leaderboard_form if field.widget.input_type != 'hidden' %}
-                    <div class="o-form-element">
-                        {% if field.id == 'number_of_games' %}
-                        <div class="label-container">
-                            {{ field.label(class="c-label") }}
-                            <span id="number-of-games-value">{{ field.data }}</span>
-                        </div>
-                        {{ field(class="c-field c-field--label") }}
-                        {% else %}
-                        {{ field.label(class="c-label") }}
-                        {{ field(class="c-field c-field--label") }}
+                    <div role="separator" class="c-card__item c-card__item--divider">Create Leaderboard</div>
+                    <div class="c-card__item">
+                        <form id="create_leaderboard_form" class="o-container o-container--xsmall c-card u-high">
+                            <div class="c-card__body">
+                                {{ create_leaderboard_form.hidden_tag() }}
+                                {% for field in create_leaderboard_form if field.widget.input_type != 'hidden' %}
+                                <div class="o-form-element">
+                                    {% if field.id == 'number_of_games' %}
+                                    <div class="label-container">
+                                        {{ field.label(class="c-label") }}
+                                        <span id="number-of-games-value">{{ field.data }}</span>
+                                    </div>
+                                    {{ field(class="c-field c-field--label c-range--info") }}
+                                    {% else %}
+                                    {{ field.label(class="c-label") }}
+                                    {{ field(class="c-field c-field--label") }}
 
-                        {% for error in field.errors %}
-                        {{ error }}
-                        {% endfor %}
+                                    {% for error in field.errors %}
+                                    {{ error }}
+                                    {% endfor %}
 
-                        {% endif %}
-                        {% for error in field.errors %}
-                        {{ error }}
-                        {% endfor %}
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                                <div class="o-form-element" id="friendsSelection">
+                                    {% for friend in g.user.friends %}
+                                    <label>
+                                        {{ friend.friend_summoner_name }}
+                                        <input type="checkbox" name="selected_friends"
+                                            value="{{ friend.friend_puuid }}">
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <footer class="c-card__footer">
+                                <button type="submit" class="c-button c-button--brand c-button--block">
+                                    Create Leaderboard
+                                </button>
+                            </footer>
+                        </form>
                     </div>
-                    {% endfor %}
                 </div>
-                <footer class="c-card__footer">
-                    <button type="submit" class="c-button c-button--brand c-button--block">
-                        Create Leaderboard
-                    </button>
-                </footer>
-            </form>
-        </blaze-accordion-pane>
-        <blaze-accordion-pane header="View Friends">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Summoner Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for friend in g.user.friends %}
-                    <tr>
-                        <td>{{ friend.friend_summoner_name }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </blaze-accordion-pane>
-        <blaze-accordion-pane header="View Previous Leaderboards">
-            To toggle other panes
-        </blaze-accordion-pane>
-    </blaze-accordion>
-</div>
-<div class="o-grid__cell o-grid__cell--width-70">
-
-</div>
-<div class="o-grid__cell o-grid__cell--width-15">
-
+            </div>
+            <div class="o-grid__cell o-grid__cell--width-85" id="leaderboardContainer">
+                <table id="leaderboardTable" class="c-table c-table--clickable">
+                    <thead class="c-table__head">
+                        <tr class="c-table__row c-table__row--heading" id="head">
+                            <th class="c-table__cell">Summoner</th>
+                            <th class="c-table__cell">Kills</th>
+                            <th class="c-table__cell">Deaths</th>
+                            <th class="c-table__cell">Wins</th>
+                            <th class="c-table__cell">Losses</th>
+                            <th class="c-table__cell">Damage Dealt</th>
+                            <th class="c-table__cell">Damage Taken</th>
+                            <th class="c-table__cell">KDA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody" class="c-table__body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="/static/home.js"></script>
 {% endblock %}

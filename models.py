@@ -36,36 +36,67 @@ class Performance(db.Model):
         nullable=False
     )
 
-    perf_metric = db.Column(
-        db.String,
-        nullable=False
-    )
-
     leaderboard_id = db.Column(
         db.Integer,
         db.ForeignKey('leaderboards.id', ondelete="cascade"),
         nullable=False
     )
 
-    score = db.Column(
+    kills = db.Column(
         db.Integer,
-        nullable=False
+    )
+
+    deaths = db.Column(
+        db.Integer,
+    )
+
+    wins = db.Column(
+        db.Integer,
+    )
+
+    losses = db.Column(
+        db.Integer,
+    )
+
+    total_damage_dealt = db.Column(
+        db.Integer,
+    )
+
+    total_damage_taken = db.Column(
+        db.Integer,
+    )
+
+    kda = db.Column(
+        db.Float,
     )
 
     #need to add methods and class methods
     @classmethod
-    def create_performance(cls, puuid, summoner_name, perf_metric, leaderboard_id, score):
+    def create_performance(cls, 
+                           puuid, 
+                           summoner_name, 
+                           leaderboard_id, 
+                           kills, 
+                           deaths, 
+                           wins, 
+                           losses, 
+                           total_damage_dealt,
+                           total_damage_taken,
+                           kda):
         """Create a new performance."""
 
-        performance = Performance(
-            puuid=puuid,
-            summoner_name=summoner_name,
-            perf_metric=perf_metric,
-            leaderboard_id=leaderboard_id,
-            score=score
+        performance = Performance(puuid=puuid, 
+                                  summoner_name=summoner_name, 
+                                  leaderboard_id=leaderboard_id, 
+                                  kills=kills,
+                                  deaths=deaths,
+                                  wins=wins,
+                                  losses=losses,
+                                  total_damage_dealt=total_damage_dealt,
+                                  total_damage_taken=total_damage_taken,
+                                  kda=kda
         )
 
-        db.session.add(performance)
         return performance
 
 
@@ -124,6 +155,7 @@ class Friends(db.Model):
         )
 
         db.session.add(friend)
+
         return friend
 
 
@@ -153,11 +185,6 @@ class Leaderboard(db.Model):
         db.String
     )
 
-    ranked_by = db.Column(
-        db.String,
-        nullable=False
-    )
-
     number_of_games = db.Column(
         db.Integer,
         nullable=False,
@@ -171,17 +198,15 @@ class Leaderboard(db.Model):
 
     #need to add methods and class methods
     @classmethod
-    def create_leaderboard(cls, created_by, game_type, ranked_by, number_of_games):
+    def create_leaderboard(cls, created_by, game_type, number_of_games):
         """Create a new leaderboard."""
 
         leaderboard = Leaderboard(
             created_by=created_by,
             game_type=game_type,
-            ranked_by=ranked_by,
             number_of_games=number_of_games
         )
 
-        db.session.add(leaderboard)
         return leaderboard
 
 

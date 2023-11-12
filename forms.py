@@ -41,13 +41,6 @@ class CreateLeaderboardForm(FlaskForm):
     game_type = SelectField('Game Mode', choices=[(450, 'ARAM'), 
                                       (420, 'Ranked Solo Queue')])
     
-    ranked_by = SelectField('Compare by', choices=[('win', 'Wins / Losses'), 
-                                      ('totalDamageDealtToChampions', 'Total Damage to Champs'), 
-                                      ('kills', 'Kills'),
-                                      ('deaths', 'Deaths')])
-    
     number_of_games = IntegerRangeField("Number of Games",
                                         default=20,
                                         render_kw={'min': 1, 'max': 100})
-    
-    # friends_to_compare = BooleanField('Friends to Compare', validators=[InputRequired()])

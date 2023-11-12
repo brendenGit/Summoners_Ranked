@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, request, jsonify, flash, redirect, session, g
+from flask import Flask, render_template, request, jsonify, flash, redirect, session, g, url_for
 from models import db, User, Friends, Leaderboard
 from backend_funcs import *
 from forms import *
@@ -8,8 +8,6 @@ from riot_api_calls import *
 from keys import RIOT_API_KEY
 from sqlalchemy.exc import IntegrityError
 import os
-
-
 
 
 CURR_USER_KEY = "curr_user"
@@ -27,8 +25,15 @@ migrate = Migrate(app, db)
 ##############################################################################
 # Main routes for user sign in/sign up and the main page
 
+@app.route("/test")
+def test():
+    return redirect("/")
+
 @app.route("/")
 def start():
+    if g.user:
+        return redirect("/home")
+    
     login_form = LoginForm()
     sign_up_form = SignUpForm()
 
@@ -84,6 +89,7 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     """Handle user login."""
@@ -96,8 +102,8 @@ def login():
 
         if user:
             do_login(user)
-            response = {"success": f"Hello, {user.summoner_name}!"}
-            return jsonify(response), 200
+            flash(f"Hello, {user.summoner_name}!","success")
+            return redirect(url_for('show_home')), 302
         
         response = {"error": "Invalid username or password!"}
         return jsonify(response), 401
@@ -105,16 +111,18 @@ def login():
     return redirect('/')
 
 
+
 @app.route('/logout')
 def logout():
     """Handle logout of user."""
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/"), 401
     
     do_logout()
-    response = {"success": "Successfully logged out"}
-    return jsonify(response), 200
+    flash("Successfully logged out.", "success")
+    return redirect("/"), 302
+
 
 
 @app.route("/sign_up", methods=['GET','POST'])
@@ -165,11 +173,12 @@ def sign_up_form():
             return jsonify(response), 500
 
     else:
-        # If form validation fails, return an error response with the form errors
         errors = form.errors
         response = {"error": "Form validation failed", "form_errors": errors}
         return jsonify(response), 400
     
+
+
 
 ##############################################################################
 # Add friends
@@ -178,7 +187,7 @@ def sign_up_form():
 def add_friend_form():
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/"), 302
     
     form = AddFriendForm()
 
@@ -204,18 +213,21 @@ def add_friend_form():
                             )
             db.session.commit()
 
-            response = {"friend_puuid":friend_puuid, "friend_summoner_name":friend_summoner_name}
+            response = {"success":f"Successfully added {friend_summoner_name}",
+                        "friend_puuid":friend_puuid,
+                        "friend_summoner_name":friend_summoner_name}
             return jsonify(response), 200
         else:
             response = {"error": "Failed to retrieve summoner data"}
             return jsonify(response), 500
     
     else:
-        # If form validation fails, return an error response with the form errors
         errors = form.errors
         response = {"error": "Form validation failed", "form_errors": errors}
         return jsonify(response), 400
     
+
+
 
 ##############################################################################
 # Routes for creating leaderboards and performances
@@ -233,50 +245,59 @@ def create_leaderboard():
         created_by = g.user.puuid
 
         game_type = form.game_type.data
-        ranked_by = form.ranked_by.data
         number_of_games = form.number_of_games.data
 
         leaderboard = Leaderboard.create_leaderboard(created_by,
                                                      game_type,
-                                                     ranked_by,
                                                      number_of_games)
+        db.session.add(leaderboard)
         db.session.commit()
 
         personal_performance = per_performance(api_key=RIOT_API_KEY,
                                                puuid=created_by,
                                                queue=game_type,
-                                               num_games=number_of_games,
-                                               ranked_by=ranked_by)
-        
-        Performance.create_performance(puuid=created_by,
+                                               num_games=number_of_games)
+
+        personal_perf = Performance.create_performance(puuid=created_by,
                                        summoner_name=g.user.summoner_name,
-                                       perf_metric=ranked_by,
                                        leaderboard_id=leaderboard.id,
-                                       score=personal_performance)
+                                       kills=personal_performance['Kills'],
+                                       deaths=personal_performance['Deaths'],
+                                       wins=personal_performance['Wins'],
+                                       losses=personal_performance['Losses'],
+                                       total_damage_dealt=personal_performance['Total Damage Dealt'],
+                                       total_damage_taken=personal_performance['Total Damage Taken'],
+                                       kda=round(personal_performance['KDA'], 1))
+        db.session.add(personal_perf)
+        db.session.commit()
 
         for puuid in selected_friends:
             score = friends_performance(api_key=RIOT_API_KEY,
                                         puuid=puuid,
                                         queue=game_type,
-                                        num_games=number_of_games,
-                                        ranked_by=ranked_by)
+                                        num_games=number_of_games)
             
             friend = Friends.query.filter_by(friend_puuid=puuid).first()
             
-            Performance.create_performance(puuid=puuid,
-                                           summoner_name=friend.friend_summoner_name,
-                                           perf_metric=ranked_by,
-                                           leaderboard_id=leaderboard.id,
-                                           score=score)
+            performance = Performance.create_performance(puuid=created_by,
+                                        summoner_name=friend.friend_summoner_name,
+                                        leaderboard_id=leaderboard.id,
+                                        kills=score['Kills'],
+                                        deaths=score['Deaths'],
+                                        wins=score['Wins'],
+                                        losses=score['Losses'],
+                                        total_damage_dealt=score['Total Damage Dealt'],
+                                        total_damage_taken=score['Total Damage Taken'],
+                                        kda=round(score['KDA'], 1))
             
-        db.session.commit()
+            db.session.add(performance)
+            db.session.commit()
 
         perf_data = get_perf_data(leaderboard.performances)
-            
+
         return jsonify(perf_data)
     
     else:
-        # If form validation fails, return an error response with the form errors
         errors = form.errors
         response = {"error": "Form validation failed", "form_errors": errors}
         return jsonify(response), 400
