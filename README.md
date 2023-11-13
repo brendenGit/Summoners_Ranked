@@ -1,5 +1,6 @@
 # Summoner's Ranked 
 [https://sr-web-service.onrender.com/](https://sr-web-service.onrender.com/)
+
 A web app, Summoner's Ranked (SR). Users can connect their League of Legends account, add friends to their SR friends list, and compare League metrics across their 
 friends for some friendly competition and bragging rights.
 
