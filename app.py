@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 with app.app_context():
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://dlfgbfgw:P-GAR-WSsDZCCrt3eLkRRkMDp1g7x8bq@bubble.db.elephantsql.com/dlfgbfgw'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dlfgbfgw:P-GAR-WSsDZCCrt3eLkRRkMDp1g7x8bq@bubble.db.elephantsql.com/dlfgbfgw'
     app.config['SECRET_KEY'] = 'sage123'
     db.init_app(app)
     db.create_all()
