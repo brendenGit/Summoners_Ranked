@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, jsonify, flash, redirect, ses
 from utils.backend_funcs import *
 from flask_migrate import Migrate
 from utils.riot_api_calls import *
-from utils.keys import RIOT_API_KEY
+from keys import RIOT_API_KEY
 from sqlalchemy.exc import IntegrityError
 import os
 
