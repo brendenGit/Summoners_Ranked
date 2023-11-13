@@ -55,7 +55,6 @@ PyJWT==2.3.0
 pyparsing==2.4.7
 pyscopg2==66.0.2
 PySocks==1.7.1
-python-apt==2.4.0+ubuntu2
 requests==2.31.0
 SecretStorage==3.3.1
 selenium==4.12.0
