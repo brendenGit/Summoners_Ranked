@@ -33,7 +33,7 @@ The leaderboard can be sorted by any column allowing users to see who is perform
   - Flask-Bcrypt
   - Flask-WTF
   - Jinja2
-  - Requests (`requests==2.31.0`)
+  - Requests
  
 - **Web Technologies:**
   - HTML
@@ -41,8 +41,7 @@ The leaderboard can be sorted by any column allowing users to see who is perform
   - JavaScript
 
 - **ORM:**
-  - SQLAlchemy (used by Flask by default, not explicitly mentioned in requirements.txt)
-  - Torch (`torch==2.0.1`)
+  - SQLAlchemy
 
 - **Deployed with:**
   - ElephantSQL
