@@ -67,7 +67,6 @@ trio==0.22.2
 trio-websocket==0.10.4
 triton==2.0.0
 typing_extensions==4.7.1
-unattended-upgrades==0.1
 urllib3==2.0.4
 wadllib==1.3.6
 Werkzeug==2.3.7
