@@ -29,8 +29,6 @@ jaraco.collections==4.3.0
 jaraco.context==4.3.0
 jaraco.functools==3.9.0
 jaraco.text==3.11.1
-jasmine==3.99.0
-jasmine-core==3.99.0
 jeepney==0.7.1
 Jinja2==3.1.2
 keyring==23.5.0
