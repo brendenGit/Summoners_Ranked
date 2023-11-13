@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from sqlalchemy.schema import UniqueConstraint
+
 
 
 bcrypt = Bcrypt()
@@ -113,13 +115,13 @@ class Friends(db.Model):
 
     friend_puuid = db.Column(
         db.String, 
-        nullable=False
+        nullable=False,
     )
     
     friended_by_puuid = db.Column(
         db.String, 
         db.ForeignKey('users.puuid', ondelete="cascade"),
-        nullable=False
+        nullable=False,
     )
 
     friend_profile_icon = db.Column(
@@ -136,6 +138,10 @@ class Friends(db.Model):
     friend_region = db.Column(
         db.String,
         nullable=False
+    )
+
+    __table_args__ = (
+        UniqueConstraint('friend_puuid', 'friended_by_puuid', name='uq_friendship'),
     )
 
     #need to add methods and class methods
@@ -223,7 +229,7 @@ class User(db.Model):
         unique=True
     )
 
-    email = db.Column(
+    username = db.Column(
         db.String, 
         unique=True, 
         nullable=False
@@ -260,7 +266,7 @@ class User(db.Model):
 
     #need to add methods and class methods
     @classmethod
-    def create_account(cls, puuid, email, password, region, summoner_name, profile_icon_id):
+    def create_account(cls, puuid, username, password, region, summoner_name, profile_icon_id):
         """Create a new user account.
 
         Hashes password and adds user to system.
@@ -270,7 +276,7 @@ class User(db.Model):
 
         user = User(
             puuid=puuid,
-            email=email,
+            username=username,
             password=hashed_pwd,
             region=region,
             summoner_name=summoner_name,
@@ -281,13 +287,13 @@ class User(db.Model):
         return user
     
     @classmethod
-    def authenticate(cls, email, password):
-        """Find user with `email` and `password`.
+    def authenticate(cls, username, password):
+        """Find user with `username` and `password`.
 
         If can't find matching user (or if password is wrong), returns False.
         """
 
-        user = cls.query.filter_by(email=email).first()
+        user = cls.query.filter_by(username=username).first()
 
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)

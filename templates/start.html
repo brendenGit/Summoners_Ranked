@@ -10,8 +10,7 @@
     <div class="o-grid__cell o-grid__cell--width-33">
     </div>
     <div class="o-grid__cell o-grid__cell--width-33">
-        <form id="loginForm" method="POST" action="/login"
-            class="o-container o-container--small c-card u-high startForm">
+        <form id="loginForm" method="POST" class="o-container o-container--small c-card u-high startForm">
             <header class="c-card__header">
                 <h2 class="c-heading">
                     Login
@@ -24,11 +23,7 @@
                 <div class="o-form-element">
                     <label class="c-label">
                         {{ field.label }}:
-                        {% if field.label == "Email"%}
-                        {{ field(placeholder="your@email.com", class="c-field c-field--label", type="email") }}
-                        {% else %}
                         {{ field(class="c-field c-field--label") }}
-                        {% endif %}
                     </label>
                     {% for error in field.errors %}
                     {{ error }}
@@ -42,8 +37,7 @@
                 </button>
             </footer>
         </form>
-        <form id="signUpForm" class="o-container o-container--small c-card u-high noDisplay startForm" method="POST"
-            action="/sign_up">
+        <form id="signUpForm" class="o-container o-container--small c-card u-high noDisplay startForm" method="POST">
             <header class="c-card__header">
                 <h2 class="c-heading">
                     Sign Up
@@ -56,11 +50,7 @@
                 <div class="o-form-element">
                     <label class="c-label">
                         {{ field.label }}:
-                        {% if field.label == "Email"%}
-                        {{ field(placeholder="your@email.com", class="c-field c-field--label", type="email") }}
-                        {% else %}
                         {{ field(class="c-field c-field--label") }}
-                        {% endif %}
                     </label>
                     {% for error in field.errors %}
                     {{ error }}
@@ -78,5 +68,5 @@
     <div class="o-grid__cell o-grid__cell--width-34">
     </div>
 </div>
-<script src="/static/start.js"></script>
+<script src="/static/js/start.js"></script>
 {% endblock %}

@@ -65,8 +65,10 @@ body {
 #leaderboardContainer {
     width: 100%;
     position: relative;
-    padding-left: 3%;
-    padding-right: 5%;
+    padding-left: 2%;
+    padding-right: 6%;
+    padding-top: 1%;
+    z-index: 10;
 }
 
 #leaderboardTable {
@@ -100,6 +102,56 @@ td {
     position: relative;
 }
 
+#loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #374557;
+    width: 420px;
+    height: 420px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    z-index: 100;
+}
+
+#loader-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -100;
+
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.sorted {
+    background-color: #f0f0f0 !important;
+    color: black !important;
+}
+
+[title]:hover::before {
+    content: attr(title);
+    position: absolute;
+    background: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
 
 /**********************************************************************/
 /* navbar styles*/
@@ -118,7 +170,7 @@ td {
 
     @supports (background-clip: text) or (-webkit-background-clip: text) {
         background-image:
-            url("/static/gold.jpg");
+            url("/static/imgs/gold.jpg");
         background-size: 110% auto;
         background-position: center;
         color: transparent;
@@ -197,21 +249,3 @@ body {
     width: 100%;
     height: 100vh;
 }
-
-/* @media (max-width: 740px) {
-    * {
-        font-size: 70%;
-    }
-}
-
-@media (max-width: 500px) {
-    * {
-        font-size: 55%;
-    }
-}
-
-@media (max-width: 390px) {
-    * {
-        font-size: 45%;
-    }
-} */

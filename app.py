@@ -1,11 +1,11 @@
 import requests
+from models_forms.forms import *
+from models_forms.models import *
 from flask import Flask, render_template, request, jsonify, flash, redirect, session, g, url_for
-from models import db, User, Friends, Leaderboard
-from backend_funcs import *
-from forms import *
+from utils.backend_funcs import *
 from flask_migrate import Migrate
-from riot_api_calls import *
-from keys import RIOT_API_KEY
+from utils.riot_api_calls import *
+from utils.keys import RIOT_API_KEY
 from sqlalchemy.exc import IntegrityError
 import os
 
@@ -14,7 +14,7 @@ CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///LoC_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///sr_db'
 app.config['SECRET_KEY'] = 'sage123'
 
 
@@ -24,10 +24,6 @@ migrate = Migrate(app, db)
 
 ##############################################################################
 # Main routes for user sign in/sign up and the main page
-
-@app.route("/test")
-def test():
-    return redirect("/")
 
 @app.route("/")
 def start():
@@ -97,7 +93,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.authenticate(form.email.data,
+        user = User.authenticate(form.username.data,
                                  form.password.data)
 
         if user:
@@ -153,7 +149,7 @@ def sign_up_form():
             try:
                 user = User.create_account(
                     puuid=summoner_data['puuid'],
-                    email = form.sign_up_email.data,
+                    username = form.sign_up_username.data,
                     password=form.sign_up_password.data,
                     region = form.region.data,
                     summoner_name=summoner_data['name'],
@@ -166,7 +162,7 @@ def sign_up_form():
                 return redirect("/home")
             
             except IntegrityError:
-                response = {"error": "Account with that email or summoner name is already taken"}
+                response = {"error": "Account with that username or summoner name is already taken"}
                 return jsonify(response), 400
         else:
             response = {"error": "Failed to retrieve summoner data"}
@@ -183,7 +179,7 @@ def sign_up_form():
 ##############################################################################
 # Add friends
 
-@app.route("/add_friend", methods=['GET','POST'])
+@app.route("/add_friend", methods=['GET', 'POST'])
 def add_friend_form():
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -205,18 +201,30 @@ def add_friend_form():
             friend_summoner_name = friend_summoner_data['name']
             friend_region = friend_region
 
-            Friends.add_friend(friend_puuid,
-                            friended_by_puuid,
-                            friend_profile_icon, 
-                            friend_summoner_name,
-                            friend_region
-                            )
-            db.session.commit()
+            try:
+                Friends.add_friend(friend_puuid,
+                                   friended_by_puuid,
+                                   friend_profile_icon, 
+                                   friend_summoner_name,
+                                   friend_region
+                                   )
+                db.session.commit()
 
-            response = {"success":f"Successfully added {friend_summoner_name}",
-                        "friend_puuid":friend_puuid,
-                        "friend_summoner_name":friend_summoner_name}
-            return jsonify(response), 200
+                response = {"success": f"Successfully added {friend_summoner_name}",
+                            "friend_puuid": friend_puuid,
+                            "friend_summoner_name": friend_summoner_name}
+                return jsonify(response), 200
+
+            except IntegrityError as e:
+                db.session.rollback()
+
+                if 'unique constraint' in str(e).lower():
+                    response = {"error": "Friend already added"}
+                    return jsonify(response), 400
+                else:
+                    response = {"error": "Failed to add friend due to an integrity error"}
+                    return jsonify(response), 500
+
         else:
             response = {"error": "Failed to retrieve summoner data"}
             return jsonify(response), 500

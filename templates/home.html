@@ -89,21 +89,24 @@
                     <thead class="c-table__head">
                         <tr class="c-table__row c-table__row--heading" id="head">
                             <th class="c-table__cell">Summoner</th>
-                            <th class="c-table__cell">Kills</th>
-                            <th class="c-table__cell">Deaths</th>
-                            <th class="c-table__cell">Wins</th>
-                            <th class="c-table__cell">Losses</th>
-                            <th class="c-table__cell">Damage Dealt</th>
-                            <th class="c-table__cell">Damage Taken</th>
-                            <th class="c-table__cell">KDA</th>
+                            <th class="c-table__cell sortable" data-index="1" id="sortStart" title="Click to sort">Kills</th>
+                            <th class="c-table__cell sortable" data-index="2" title="Click to sort">Deaths</th>
+                            <th class="c-table__cell sortable" data-index="3" title="Click to sort">Wins</th>
+                            <th class="c-table__cell sortable" data-index="4" title="Click to sort">Losses</th>
+                            <th class="c-table__cell sortable" data-index="5" title="Click to sort">Damage Dealt</th>
+                            <th class="c-table__cell sortable" data-index="6" title="Click to sort">Damage Taken</th>
+                            <th class="c-table__cell sortable" data-index="7" title="Click to sort">KDA</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody" class="c-table__body">
                     </tbody>
                 </table>
+                <div id="loader-container">
+                    <div class="noDisplay" id="loader"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script src="/static/home.js"></script>
+<script src="/static/js/home.js"></script>
 {% endblock %}
