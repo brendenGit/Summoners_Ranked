@@ -24,6 +24,13 @@ body {
     font-family: 'LeagueFont', sans-serif;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #10171d;
+}
+
 .main {
     padding: 0;
     width: 100%;
@@ -32,7 +39,6 @@ body {
 .main-grid {
     background-color: #10171d;
 }
-
 
 /**********************************************************************/
 /* Small styles for number of games labeling */
@@ -54,7 +60,7 @@ body {
 }
 
 #friendsSelection {
-    max-height: 400px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
@@ -182,7 +188,7 @@ td {
 #side-nav {
     padding-left: 20px;
     background-color: #10171d;
-    height: 100vh;
+    height: 100%;
     min-width: 275px;
     max-width: 325px;
     border-top: solid white 1px;
@@ -241,10 +247,4 @@ td {
     text-align: center;
     padding-bottom: 5%;
     padding-top: 4%;
-}
-
-body {
-    background-color: #10171d;
-    width: 100%;
-    height: 100vh;
 }
