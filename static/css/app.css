@@ -42,7 +42,7 @@ body {
 }
 
 .c-label {
-    margin-right: 10px;
+    padding-right: 10px;
 }
 
 
@@ -67,7 +67,7 @@ body {
     position: relative;
     padding-left: 2%;
     padding-right: 6%;
-    padding-top: 1%;
+    padding-top: 4%;
     z-index: 10;
 }
 
@@ -76,8 +76,6 @@ body {
     color: rgb(224, 219, 219);
     -webkit-box-shadow: 0px 5px 15px 8px #080823;
     box-shadow: 0px 5px 15px 8px #080823;
-    margin-top: 5%;
-    margin-right: 2%;
     overflow: hidden;
     border-radius: 10px;
 }
@@ -162,6 +160,7 @@ td {
     text-align: right;
 }
 
+
 .brand {
     font-size: 2.8rem;
 }
@@ -181,7 +180,7 @@ td {
 
 
 #side-nav {
-    margin-left: 20px;
+    padding-left: 20px;
     background-color: #10171d;
     height: 100vh;
     min-width: 275px;
@@ -195,11 +194,11 @@ td {
 
 #selectionPane {
     background-color: #10171d;
-    margin-top: 2%;
+    padding-top: 2%;
 }
 
 .c-card__item--divider {
-    margin-top: 5%;
+    padding-top: 5%;
     background-color: transparent;
     color: white;
     font-size: 2rem;
@@ -240,7 +239,7 @@ td {
 
 #startNav {
     text-align: center;
-    margin-bottom: 5%;
+    padding-bottom: 5%;
     padding-top: 4%;
 }
 
